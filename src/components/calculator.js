@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Calc,
@@ -9,39 +9,118 @@ import {
   Ops,
 } from "./cal_style";
 
-class Cal extends React.Component {
-  render() {
-    return (
-      <Container>
-        <Calc>
-          <Display>0</Display>
-          <Nums>
-            <Number>7</Number>
-            <Number>8</Number>
-            <Number>9</Number>
-            <Clear>C</Clear>
-          </Nums>
-          <Nums>
-            <Number>4</Number>
-            <Number>5</Number>
-            <Number>6</Number>
-            <Ops>+</Ops>
-          </Nums>
-          <Nums>
-            <Number>1</Number>
-            <Number>2</Number>
-            <Number>3</Number>
-            <Ops>-</Ops>
-          </Nums>
-          <Nums>
-            <Number>0</Number>
-            <Ops>=</Ops>
-            <Ops>x</Ops>
-            <Ops>/</Ops>
-          </Nums>
-        </Calc>
-      </Container>
-    );
-  }
+function Cal() {
+  const [display, setDisplay] = useState("0");
+  const [oper, setOper] = useState("");
+  const [calcTemp, setCalcTemp] = useState("");
+  const [result, setResult] = useState(0);
+
+  const updateDisplay = (char) => {
+    setDisplay(display === "0" ? char : display + char);
+  };
+
+  const numBtnClick = (e) => {
+    console.log("1");
+    updateDisplay(e.target.value);
+    setCalcTemp(calcTemp + e.target.value);
+  };
+
+  const opsClick = (e) => {
+    console.log("2");
+
+    const currentOper = e.target.value;
+    if (calcTemp === "") {
+      console.log("5");
+
+      // 오퍼레이터 저장소 교체
+      // display 마지막 문자열 교체
+      if (currentOper === "+") {
+        updateDisplay(currentOper);
+        setOper(currentOper);
+      }
+      if (currentOper === "-") {
+        console.log("6");
+      }
+      return;
+    }
+    if (oper === "+") {
+      console.log("4");
+      const newResult = result + parseInt(calcTemp);
+      setResult(newResult);
+      setDisplay(newResult + currentOper);
+    } else {
+      console.log("3");
+      setResult(parseInt(calcTemp));
+      updateDisplay(currentOper);
+      setOper(currentOper);
+    }
+    setCalcTemp("");
+  };
+
+  const allClear = () => {
+    // 모두 초깃값으로 변경
+    setDisplay("0");
+  };
+  return (
+    <Container>
+      <Calc>
+        <Display>{display}</Display>
+        <Nums>
+          <Number onClick={numBtnClick} value="7">
+            7
+          </Number>
+          <Number onClick={numBtnClick} value="8">
+            8
+          </Number>
+          <Number onClick={numBtnClick} value="9">
+            9
+          </Number>
+          <Clear onClick={allClear}>C</Clear>
+        </Nums>
+        <Nums>
+          <Number onClick={numBtnClick} value="4">
+            4
+          </Number>
+          <Number onClick={numBtnClick} value="5">
+            5
+          </Number>
+          <Number onClick={numBtnClick} value="6">
+            6
+          </Number>
+          <Ops onClick={opsClick} value="+">
+            +
+          </Ops>
+        </Nums>
+        <Nums>
+          <Number onClick={numBtnClick} value="1">
+            1
+          </Number>
+          <Number onClick={numBtnClick} value="2">
+            2
+          </Number>
+          <Number onClick={numBtnClick} value="3">
+            3
+          </Number>
+          <Ops onClick={opsClick} value="-">
+            -
+          </Ops>
+        </Nums>
+        <Nums>
+          <Number onClick={numBtnClick} value="0">
+            0
+          </Number>
+          <Ops onClick={opsClick} value="=">
+            =
+          </Ops>
+          <Ops onClick={opsClick} value="x">
+            x
+          </Ops>
+          <Ops onClick={opsClick} value="/">
+            /
+          </Ops>
+        </Nums>
+      </Calc>
+    </Container>
+  );
 }
 export default Cal;
